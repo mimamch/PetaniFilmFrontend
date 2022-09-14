@@ -1,4 +1,5 @@
 import { Html, Head, Main, NextScript } from "next/document";
+import Script from "next/script";
 
 export default function Document() {
   return (
@@ -41,13 +42,43 @@ export default function Document() {
           rel="stylesheet"
           type="text/css"
         />
-        <script src="/assets/libs/jquery/jquery.min.js"></script>
-        <script src="/assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
-        <script src="/assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
-        <script src="/assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
-        <script src="/assets/libs/node-waves/waves.min.js"></script>
-        <script src="/assets/libs/metismenu/metisMenu.min.js"></script>
-        <script src="/assets/libs/apexcharts/apexcharts.min.js"></script>
+
+        <Script
+          src="/assets/libs/jquery/jquery.min.js"
+          strategy="beforeInteractive"
+        />
+        <Script
+          src="/assets/libs/bootstrap/js/bootstrap.bundle.min.js"
+          strategy="beforeInteractive"
+        />
+        <Script
+          src="/assets/libs/datatables.net/js/jquery.dataTables.min.js"
+          strategy="beforeInteractive"
+        />
+        <Script
+          src="/assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"
+          strategy="beforeInteractive"
+        />
+        <Script
+          src="/assets/libs/node-waves/waves.min.js"
+          strategy="beforeInteractive"
+        />
+        <Script
+          src="/assets/libs/metismenu/metisMenu.min.js"
+          strategy="beforeInteractive"
+        />
+        <Script
+          src="/assets/libs/apexcharts/apexcharts.min.js"
+          strategy="beforeInteractive"
+        />
+
+        {/* <Script src="/assets/libs/jquery/jquery.min.js"></Script>
+        <Script src="/assets/libs/bootstrap/js/bootstrap.bundle.min.js"></Script>
+        <Script src="/assets/libs/datatables.net/js/jquery.dataTables.min.js"></Script>
+        <Script src="/assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></Script>
+        <Script src="/assets/libs/node-waves/waves.min.js"></Script>
+        <Script src="/assets/libs/metismenu/metisMenu.min.js"></Script>
+        <Script src="/assets/libs/apexcharts/apexcharts.min.js"></Script> */}
       </Head>
       <body>
         <Main />
