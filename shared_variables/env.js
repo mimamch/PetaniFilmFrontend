@@ -1,0 +1,4 @@
+export const TMDB_API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
+export const TMDB_BASE_URL = process.env.NEXT_PUBLIC_TMDB_BASE_URL;
+export const NEXT_PUBLIC_PETANI_FILM_BASE_URL =
+  process.env.NEXT_PUBLIC_PETANI_FILM_BASE_URL;
