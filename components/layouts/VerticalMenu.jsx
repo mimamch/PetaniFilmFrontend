@@ -29,6 +29,9 @@ export default function VerticalMenu() {
                 </a>
               </Link>
             </li>
+            <li className="menu-title" key="t-apps">
+              Movies
+            </li>
             <li>
               <Link href="/movies">
                 <a className="waves-effect">
@@ -36,6 +39,25 @@ export default function VerticalMenu() {
                   <span key="t-chat">Movies</span>
                 </a>
               </Link>
+            </li>
+            <li>
+              <Link href="/movies/links">
+                <a className="waves-effect">
+                  <i className="bx bx-link-alt"></i>
+                  <span key="movie-links">Movie Links</span>
+                </a>
+              </Link>
+            </li>
+            <li>
+              <Link href="/movies/substitles">
+                <a className="waves-effect">
+                  <i className="bx bx-captions"></i>
+                  <span key="movie-subtitles">Subtitles</span>
+                </a>
+              </Link>
+            </li>
+            <li className="menu-title" key="t-tv">
+              TV-Shows
             </li>
             <li>
               <Link href="/tv-show">

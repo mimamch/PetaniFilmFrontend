@@ -1,23 +1,23 @@
 import React, { useEffect, useState } from "react";
-import Wrapper from "../components/Wrapper";
+import Wrapper from "../../components/Wrapper";
 import axios from "axios";
 import {
   NEXT_PUBLIC_PETANI_FILM_BASE_URL,
   TMDB_API_KEY,
   TMDB_BASE_URL,
-} from "../shared_variables/env";
+} from "../../shared_variables/env";
 import Head from "next/head";
-import Spinner from "../components/spinner";
+import Spinner from "../../components/spinner";
 import { toast } from "react-toastify";
 import InfiniteScroll from "react-infinite-scroll-component";
 export default function Movies() {
-  const [isLoading, setIsLoading] = useState(false);
   const [movies, setMovies] = useState([]);
   const [moviesTemp, setMoviesTemp] = useState([]);
   const [pageData, setPageData] = useState({ page: 1, total_pages: 1000 });
   const [hasMore, setHasMore] = useState(false);
   const [queryState, setQueryState] = useState("");
   const [isSearch, setIsSearch] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const getData = async (page, query) => {
     try {
       setIsLoading(true);
@@ -48,6 +48,7 @@ export default function Movies() {
       }
       setIsLoading(false);
     } catch (error) {
+      setIsLoading(false);
       //   toast.error(error.message);
       console.log(error);
     }
@@ -87,6 +88,7 @@ export default function Movies() {
                   <div className="page-title-box d-sm-flex align-items-center justify-content-between">
                     <h4 className="mb-sm-0 font-size-18">Movies</h4>
                     <form
+                      id="custom-search"
                       className="app-search d-block"
                       onSubmit={(e) => e.preventDefault()}
                     >
@@ -114,10 +116,14 @@ export default function Movies() {
               {/* end page title */}
 
               {!movies.length ? (
-                <div className="row justify-content-center">
-                  {" "}
-                  <Spinner />{" "}
-                </div>
+                isLoading ? (
+                  <div className="row justify-content-center">
+                    {" "}
+                    <Spinner />{" "}
+                  </div>
+                ) : (
+                  <h3 className="text-center p-5">End of data</h3>
+                )
               ) : (
                 <InfiniteScroll
                   style={{ overflow: "hidden" }}
@@ -129,7 +135,7 @@ export default function Movies() {
                 >
                   <div className="row">
                     {movies.map((e, i) => (
-                      <div className="col-md-2 col-xl-2" key={i}>
+                      <div className="col-md-2 col-xl-2 col-4" key={i}>
                         <div style={{ height: "100%" }} className="card">
                           <img
                             className="card-img-top img-fluid"
@@ -141,7 +147,9 @@ export default function Movies() {
                             <p>
                               <i className="bx bxs-star"></i> {e.vote_average}
                             </p>
-                            <p className="card-text">{e.overview}</p>
+                            <p className="card-text d-none d-md-block">
+                              {e.overview}
+                            </p>
                             <div style={{ height: "100%" }}></div>
                           </div>
                           <button

@@ -11,19 +11,19 @@ export default function Topbar() {
             <Link href="/">
               <a className="logo logo-dark ">
                 <span className="logo-sm">
-                  <img src="assets/images/logo.svg" alt="" height={22} />
+                  <img src="/assets/images/logo.svg" alt="" height={22} />
                 </span>
                 <span className="logo-lg">
-                  <img src="assets/images/logo-dark.png" alt="" height={17} />
+                  <img src="/assets/images/logo-dark.png" alt="" height={17} />
                 </span>
               </a>
             </Link>
             <a href="index.html" className="logo logo-light">
               <span className="logo-sm">
-                <img src="assets/images/logo-light.svg" alt="" height={22} />
+                <img src="/assets/images/logo-light.svg" alt="" height={22} />
               </span>
               <span className="logo-lg">
-                <img src="assets/images/logo-light.png" alt="" height={19} />
+                <img src="/assets/images/logo-light.png" alt="" height={19} />
               </span>
             </a>
           </div>
@@ -221,7 +221,7 @@ export default function Topbar() {
                     <div className="col-sm-5">
                       <div>
                         <img
-                          src="assets/images/megamenu-img.png"
+                          src="/assets/images/megamenu-img.png"
                           alt=""
                           className="img-fluid mx-auto d-block"
                         />
@@ -278,7 +278,7 @@ export default function Topbar() {
             >
               <img
                 id="header-lang-img"
-                src="assets/images/flags/us.jpg"
+                src="/assets/images/flags/us.jpg"
                 alt="Header Language"
                 height={16}
               />
@@ -291,7 +291,7 @@ export default function Topbar() {
                 data-lang="en"
               >
                 <img
-                  src="assets/images/flags/us.jpg"
+                  src="/assets/images/flags/us.jpg"
                   alt="user-image"
                   className="me-1"
                   height={12}
@@ -305,7 +305,7 @@ export default function Topbar() {
                 data-lang="sp"
               >
                 <img
-                  src="assets/images/flags/spain.jpg"
+                  src="/assets/images/flags/spain.jpg"
                   alt="user-image"
                   className="me-1"
                   height={12}
@@ -319,7 +319,7 @@ export default function Topbar() {
                 data-lang="gr"
               >
                 <img
-                  src="assets/images/flags/germany.jpg"
+                  src="/assets/images/flags/germany.jpg"
                   alt="user-image"
                   className="me-1"
                   height={12}
@@ -333,7 +333,7 @@ export default function Topbar() {
                 data-lang="it"
               >
                 <img
-                  src="assets/images/flags/italy.jpg"
+                  src="/assets/images/flags/italy.jpg"
                   alt="user-image"
                   className="me-1"
                   height={12}
@@ -347,7 +347,7 @@ export default function Topbar() {
                 data-lang="ru"
               >
                 <img
-                  src="assets/images/flags/russia.jpg"
+                  src="/assets/images/flags/russia.jpg"
                   alt="user-image"
                   className="me-1"
                   height={12}
@@ -371,14 +371,17 @@ export default function Topbar() {
                 <div className="row g-0">
                   <div className="col">
                     <a className="dropdown-icon-item" href="#">
-                      <img src="assets/images/brands/github.png" alt="Github" />
+                      <img
+                        src="/assets/images/brands/github.png"
+                        alt="Github"
+                      />
                       <span>GitHub</span>
                     </a>
                   </div>
                   <div className="col">
                     <a className="dropdown-icon-item" href="#">
                       <img
-                        src="assets/images/brands/bitbucket.png"
+                        src="/assets/images/brands/bitbucket.png"
                         alt="bitbucket"
                       />
                       <span>Bitbucket</span>
@@ -387,7 +390,7 @@ export default function Topbar() {
                   <div className="col">
                     <a className="dropdown-icon-item" href="#">
                       <img
-                        src="assets/images/brands/dribbble.png"
+                        src="/assets/images/brands/dribbble.png"
                         alt="dribbble"
                       />
                       <span>Dribbble</span>
@@ -398,7 +401,7 @@ export default function Topbar() {
                   <div className="col">
                     <a className="dropdown-icon-item" href="#">
                       <img
-                        src="assets/images/brands/dropbox.png"
+                        src="/assets/images/brands/dropbox.png"
                         alt="dropbox"
                       />
                       <span>Dropbox</span>
@@ -407,7 +410,7 @@ export default function Topbar() {
                   <div className="col">
                     <a className="dropdown-icon-item" href="#">
                       <img
-                        src="assets/images/brands/mail_chimp.png"
+                        src="/assets/images/brands/mail_chimp.png"
                         alt="mail_chimp"
                       />
                       <span>Mail Chimp</span>
@@ -415,7 +418,7 @@ export default function Topbar() {
                   </div>
                   <div className="col">
                     <a className="dropdown-icon-item" href="#">
-                      <img src="assets/images/brands/slack.png" alt="slack" />
+                      <img src="/assets/images/brands/slack.png" alt="slack" />
                       <span>Slack</span>
                     </a>
                   </div>
@@ -491,7 +494,7 @@ export default function Topbar() {
                 <a href="#" className="text-reset notification-item">
                   <div className="d-flex">
                     <img
-                      src="assets/images/users/avatar-3.jpg"
+                      src="/assets/images/users/avatar-3.jpg"
                       className="me-3 rounded-circle avatar-xs"
                       alt="user-pic"
                     />
@@ -535,7 +538,7 @@ export default function Topbar() {
                 <a href="#" className="text-reset notification-item">
                   <div className="d-flex">
                     <img
-                      src="assets/images/users/avatar-4.jpg"
+                      src="/assets/images/users/avatar-4.jpg"
                       className="me-3 rounded-circle avatar-xs"
                       alt="user-pic"
                     />
@@ -576,7 +579,7 @@ export default function Topbar() {
             >
               <img
                 className="rounded-circle header-profile-user"
-                src="assets/images/users/avatar-1.jpg"
+                src="/assets/images/users/avatar-1.jpg"
                 alt="Header Avatar"
               />
               <span className="d-none d-xl-inline-block ms-1" key="t-henry">
