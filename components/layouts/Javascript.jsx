@@ -6,7 +6,7 @@ export default function Javascript() {
     <>
       {/* <script src="/assets/libs/apexcharts/apexcharts.min.js"></script> */}
       {/* <UseScript url="/assets/libs/metismenu/metisMenu.min.js" /> */}
-      <UseScript url="/assets/libs/simplebar/simplebar.min.js" />
+      {/* <UseScript url="/assets/libs/simplebar/simplebar.min.js" /> */}
       {/* <UseScript url="/assets/libs/node-waves/waves.min.js" /> */}
       <UseScript url="/assets/js/app.js" />
     </>

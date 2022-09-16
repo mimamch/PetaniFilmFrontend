@@ -10,6 +10,7 @@ import Head from "next/head";
 import Spinner from "../../components/spinner";
 import { toast } from "react-toastify";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { getReleaseYear } from "../../shared_functions/getReleaseYear";
 export default function Movies() {
   const [movies, setMovies] = useState([]);
   const [moviesTemp, setMoviesTemp] = useState([]);
@@ -143,7 +144,10 @@ export default function Movies() {
                             alt="Card image cap"
                           />
                           <div className="card-body">
-                            <h4 className="card-title">{e.title}</h4>
+                            <h4 className="card-title">
+                              {e.title} (
+                              {getReleaseYear(e.release_date || e.releaseDate)})
+                            </h4>
                             <p>
                               <i className="bx bxs-star"></i> {e.vote_average}
                             </p>

@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Spinner from "../../../components/spinner";
 import Wrapper from "../../../components/Wrapper";
+import { getReleaseYear } from "../../../shared_functions/getReleaseYear";
 import {
   NEXT_PUBLIC_PETANI_FILM_BASE_URL,
   TMDB_API_KEY,
@@ -132,7 +133,9 @@ export default function Links() {
                             alt="Card image cap"
                           />
                           <div className="card-body">
-                            <h4 className="card-title">{e.title}</h4>
+                            <h4 className="card-title">
+                              {e.title} ({getReleaseYear(e.releaseDate)})
+                            </h4>
                             <p>
                               <i className="bx bxs-star"></i> {e.voteAverage}
                             </p>

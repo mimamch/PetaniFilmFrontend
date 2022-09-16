@@ -1,18 +1,44 @@
 import axios from "axios";
+
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Spinner from "../../../components/spinner";
 import Wrapper from "../../../components/Wrapper";
+import { getReleaseYear } from "../../../shared_functions/getReleaseYear";
 import { NEXT_PUBLIC_PETANI_FILM_BASE_URL } from "../../../shared_variables/env";
-
+import UseScript from "../../../tools/UseScript";
+import { Formik, Form } from "formik";
 export default function AddLinks() {
   const router = useRouter();
   const { tmdbId } = router.query;
   const [movie, setMovie] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-
+  const [buttonStreamingLoading, setButtonStreamingLoading] = useState(false);
+  const [buttonDownloadLoading, setButtonDownloadLoading] = useState(false);
+  const [inputFieldsStreaming, setInputFieldsStreaming] = useState([
+    {
+      name: "",
+      title: "",
+      provider: "",
+      link: "",
+      size: 0,
+      tmdbId: 0,
+      imdbId: "",
+    },
+  ]);
+  const [inputFieldsDownload, setInputFieldsDownload] = useState([
+    {
+      name: "",
+      title: "",
+      provider: "",
+      link: "",
+      size: 0,
+      tmdbId: 0,
+      imdbId: "",
+    },
+  ]);
   const getData = async (id) => {
     try {
       setIsLoading(true);
@@ -20,6 +46,23 @@ export default function AddLinks() {
         `${NEXT_PUBLIC_PETANI_FILM_BASE_URL}/movie/get-movie-by-tmdb-id/${id}`
       );
       setMovie(data.data.data);
+      setInputFieldsStreaming([
+        {
+          name: "",
+          title: "",
+          provider: "",
+          link: "",
+          size: 0,
+          tmdbId: data.data.data.tmdbId,
+          imdbId: data.data.data.imdbId,
+        },
+      ]);
+      const links = await axios.get(
+        `${NEXT_PUBLIC_PETANI_FILM_BASE_URL}/movie/get-movie-links?tmdbId=${id}`
+      );
+
+      setInputFieldsStreaming(links.data.data.streamingLinks);
+      setInputFieldsDownload(links.data.data.downloadLinks);
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
@@ -29,6 +72,83 @@ export default function AddLinks() {
   useEffect(() => {
     tmdbId && getData(tmdbId);
   }, [tmdbId]);
+
+  const addFormField = (type) => {
+    const input = [
+      ...(type == "streaming" ? inputFieldsStreaming : inputFieldsDownload),
+    ];
+    input.push({
+      name: "",
+      title: "",
+      provider: "",
+      link: "",
+      size: 0,
+      tmdbId: movie.tmdbId,
+      imdbId: movie.imdbId,
+    });
+    type == "streaming"
+      ? setInputFieldsStreaming(input)
+      : setInputFieldsDownload(input);
+  };
+
+  const deleteFormField = (index, type) => {
+    let data = [
+      ...(type == "streaming" ? inputFieldsStreaming : inputFieldsDownload),
+    ];
+    data.splice(index, 1);
+    type == "streaming"
+      ? setInputFieldsStreaming(data)
+      : setInputFieldsDownload(data);
+  };
+
+  const onChangeFormField = (index, event, type) => {
+    if (type == "streaming") {
+      let data = [...inputFieldsStreaming];
+      data[index][event.target.name] = event.target.value;
+      setInputFieldsStreaming(data);
+    } else if (type == "download") {
+      let data = [...inputFieldsDownload];
+      data[index][event.target.name] = event.target.value;
+      setInputFieldsDownload(data);
+    }
+  };
+
+  const setStreamingLinks = async () => {
+    setButtonStreamingLoading(true);
+    try {
+      await axios.post(
+        `${NEXT_PUBLIC_PETANI_FILM_BASE_URL}/movie/add-movie-streaming-links/`,
+        {
+          imdbId: movie.imdbId,
+          tmdbId: movie.tmdbId,
+          streamingLinks: inputFieldsStreaming,
+        }
+      );
+      toast.success("Streaming Links Added With Successfully");
+    } catch (error) {
+      console.log(error);
+      toast.error(error?.response?.data?.message || error.message);
+    }
+    setButtonStreamingLoading(false);
+  };
+  const setDownloadLinks = async () => {
+    setButtonDownloadLoading(true);
+    try {
+      await axios.post(
+        `${NEXT_PUBLIC_PETANI_FILM_BASE_URL}/movie/add-movie-download-links/`,
+        {
+          imdbId: movie.imdbId,
+          tmdbId: movie.tmdbId,
+          downloadLinks: inputFieldsDownload,
+        }
+      );
+      toast.success("Download Links Added With Successfully");
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message);
+    }
+    setButtonDownloadLoading(false);
+  };
 
   return (
     <>
@@ -52,7 +172,6 @@ export default function AddLinks() {
               </div>
               {isLoading ? (
                 <div className="row justify-content-center">
-                  {" "}
                   <Spinner />
                 </div>
               ) : (
@@ -61,21 +180,25 @@ export default function AddLinks() {
                     <div className="card">
                       <div className="card-body">
                         <h5 className="fw-semibold">Poster</h5>
-                        <img
-                          className="card-img-top img-fluid"
-                          src={`https://image.tmdb.org/t/p/w500/${movie.tmdbPosterPath}`}
-                          alt="Card image cap"
-                        />
+                        {movie.tmdbPosterPath && (
+                          <img
+                            className="card-img-top img-fluid"
+                            src={`https://image.tmdb.org/t/p/w500/${movie.tmdbPosterPath}`}
+                            alt="Card image cap"
+                          />
+                        )}
                       </div>
                     </div>
                     <div className="card">
                       <div className="card-body">
                         <h5 className="fw-semibold">BackDrop</h5>
-                        <img
-                          className="card-img-top img-fluid"
-                          src={`https://image.tmdb.org/t/p/w500/${movie.tmdbBackdropPath}`}
-                          alt="Card image cap"
-                        />
+                        {movie.tmdbBackdropPath && (
+                          <img
+                            className="card-img-top img-fluid"
+                            src={`https://image.tmdb.org/t/p/w500/${movie.tmdbBackdropPath}`}
+                            alt="Card image cap"
+                          />
+                        )}
                       </div>
                     </div>
                   </div>
@@ -85,18 +208,20 @@ export default function AddLinks() {
                       <div className="card-body border-bottom">
                         <div className="d-flex">
                           <div className="flex-grow-1 ">
-                            <h4 className="fw-semibold">{movie.title}</h4>
+                            <h4 className="fw-semibold">
+                              {movie.title} - (
+                              {getReleaseYear(movie.releaseDate)})
+                            </h4>
                             <ul className="list-unstyled hstack gap-2 mb-0">
                               <li>
                                 <span className="text-muted">
                                   <i className="bx bxs-star"></i>{" "}
-                                  {movie.popularity}
+                                  {movie.voteAverage}
                                 </span>
                               </li>
                               <li>
                                 <i className="bx bxs-time"></i>
                                 <span className="text-muted">
-                                  {" "}
                                   {movie.runtime} Minutes
                                 </span>
                               </li>
@@ -107,84 +232,265 @@ export default function AddLinks() {
                       <div className="card-body">
                         <h5 className="fw-semibold mb-3">Overview</h5>
                         <p className="text-muted">{movie.overview}</p>
-                        <h5 className="fw-semibold mb-3">Responsibilities:</h5>
-                        <ul className="vstack gap-3">
-                          <li>
-                            Meeting with the design team to discuss the needs of
-                            the company.
-                          </li>
-                          <li>
-                            Building and configuring Magento 1x and 2x eCommerce
-                            websites.
-                          </li>
-                          <li>Coding of the Magento templates.</li>
-                          <li>
-                            Developing Magento modules in PHP using best
-                            practices.
-                          </li>
-                          <li>Designing themes and interfaces.</li>
-                          <li>Setting performance tasks and goals.</li>
-                          <li>
-                            Updating website features and security patches.
-                          </li>
-                        </ul>
-                        <h5 className="fw-semibold mb-3">Requirements:</h5>
-                        <ul className="vstack gap-3">
-                          <li>
-                            Bachelor’s degree in computer science or related
-                            field.
-                          </li>
-                          <li>
-                            Advanced knowledge of Magento, JavaScript, HTML,
-                            PHP, CSS, and MySQL.
-                          </li>
-                          <li>
-                            Experience with complete eCommerce lifecycle
-                            development.
-                          </li>
-                          <li>Understanding of modern UI/UX trends.</li>
-                          <li>
-                            Knowledge of Google Tag Manager, SEO, Google
-                            Analytics, PPC, and A/B Testing.
-                          </li>
-                          <li>
-                            Good working knowledge of Adobe Photoshop and Adobe
-                            Illustrator.
-                          </li>
-                          <li>Strong attention to detail.</li>
-                          <li>
-                            Ability to project-manage and work to strict
-                            deadlines.
-                          </li>
-                          <li>Ability to work in a team environment.</li>
-                        </ul>
-                        <h5 className="fw-semibold mb-3">Qualification:</h5>
-                        <ul className="vstack gap-3">
-                          <li>
-                            B.C.A / M.C.A under National University course
-                            complete.
-                          </li>
-                          <li>
-                            3 or more years of professional design experience
-                          </li>
-                          <li>
-                            Advanced degree or equivalent experience in graphic
-                            and web design
-                          </li>
-                        </ul>
-                        <h5 className="fw-semibold mb-3">
-                          Skill &amp; Experience:
-                        </h5>
-                        <ul className="vstack gap-3 mb-0">
-                          <li>Understanding of key Design Principal</li>
-                          <li>Proficiency With HTML, CSS, Bootstrap</li>
-                          <li>WordPress: 1 year (Required)</li>
-                          <li>
-                            Experience designing and developing responsive
-                            design websites
-                          </li>
-                          <li>web designing: 1 year (Preferred)</li>
-                        </ul>
+                        <div className="my-2">
+                          <ul className="list-inline mb-0">
+                            {movie?.genres?.map((e, i) => (
+                              <li key={i} className="list-inline-item ">
+                                <a
+                                  href="#"
+                                  className="btn btn-outline-info btn-hover"
+                                >
+                                  <i className="uil uil-facebook-f" /> {e}
+                                </a>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                        <div className="row">
+                          <div className="col-12">
+                            <div className="card">
+                              <div className="card-body">
+                                <h4 className="card-title mb-4">
+                                  Streaming Links
+                                </h4>
+                                <form>
+                                  <div>
+                                    {inputFieldsStreaming.map(
+                                      (input, index) => {
+                                        let type = "streaming";
+                                        return (
+                                          <div className="row" key={index}>
+                                            <div className="mb-3 col-lg-3">
+                                              <label htmlFor="name">
+                                                Provider
+                                              </label>
+                                              <input
+                                                type="text"
+                                                id="provider"
+                                                name="provider"
+                                                className="form-control"
+                                                placeholder="Enter Link Provider"
+                                                onChange={(event) =>
+                                                  onChangeFormField(
+                                                    index,
+                                                    event,
+                                                    type
+                                                  )
+                                                }
+                                                value={input.provider}
+                                              />
+                                            </div>
+                                            <div className="mb-3 col-lg-4">
+                                              <label htmlFor="subject">
+                                                Link
+                                              </label>
+                                              <input
+                                                type="text"
+                                                id="subject"
+                                                name="link"
+                                                className="form-control"
+                                                placeholder="Enter Streaming Link"
+                                                onChange={(event) =>
+                                                  onChangeFormField(
+                                                    index,
+                                                    event,
+                                                    type
+                                                  )
+                                                }
+                                                value={input.link}
+                                              />
+                                            </div>
+                                            <div className="mb-3 col-lg-2">
+                                              <label htmlFor="size">
+                                                Size (MB)
+                                              </label>
+                                              <input
+                                                type="number"
+                                                id="size"
+                                                name="size"
+                                                className="form-control"
+                                                placeholder="1024"
+                                                onChange={(event) =>
+                                                  onChangeFormField(
+                                                    index,
+                                                    event,
+                                                    type
+                                                  )
+                                                }
+                                                value={input.size}
+                                              />
+                                            </div>
+                                            <div className="col-lg-2 align-self-center">
+                                              <div className="d-grid">
+                                                <input
+                                                  onClick={() =>
+                                                    deleteFormField(index, type)
+                                                  }
+                                                  type="button"
+                                                  className="btn btn-dark"
+                                                  value="Delete"
+                                                />
+                                              </div>
+                                            </div>
+                                          </div>
+                                        );
+                                      }
+                                    )}
+                                  </div>
+                                  {buttonStreamingLoading ? (
+                                    <button
+                                      type="button"
+                                      className="btn btn-primary waves-effect waves-light"
+                                    >
+                                      <i className="bx bx-loader bx-spin font-size-16 align-middle me-2"></i>{" "}
+                                      Loading
+                                    </button>
+                                  ) : (
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        setStreamingLinks();
+                                      }}
+                                      className="btn btn-primary mt-3 mt-lg-0"
+                                    >
+                                      Submit
+                                    </button>
+                                  )}
+
+                                  <button
+                                    type="button"
+                                    onClick={() => addFormField("streaming")}
+                                    className="btn btn-success mt-3 mx-5 mt-lg-0"
+                                  >
+                                    Add Form Field
+                                  </button>
+                                </form>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="row">
+                          <div className="col-12">
+                            <div className="card">
+                              <div className="card-body">
+                                <h4 className="card-title mb-4">
+                                  Download Links
+                                </h4>
+                                <form>
+                                  <div>
+                                    {inputFieldsDownload.map((input, index) => {
+                                      let type = "download";
+                                      return (
+                                        <div className="row" key={index}>
+                                          <div className="mb-3 col-lg-3">
+                                            <label htmlFor="name">
+                                              Provider
+                                            </label>
+                                            <input
+                                              type="text"
+                                              id="provider"
+                                              name="provider"
+                                              className="form-control"
+                                              placeholder="Enter Link Provider"
+                                              onChange={(event) =>
+                                                onChangeFormField(
+                                                  index,
+                                                  event,
+                                                  type
+                                                )
+                                              }
+                                              value={input.provider}
+                                            />
+                                          </div>
+                                          <div className="mb-3 col-lg-4">
+                                            <label htmlFor="subject">
+                                              Link
+                                            </label>
+                                            <input
+                                              type="text"
+                                              id="subject"
+                                              name="link"
+                                              className="form-control"
+                                              placeholder="Enter Streaming Link"
+                                              onChange={(event) =>
+                                                onChangeFormField(
+                                                  index,
+                                                  event,
+                                                  type
+                                                )
+                                              }
+                                              value={input.link}
+                                            />
+                                          </div>
+                                          <div className="mb-3 col-lg-2">
+                                            <label htmlFor="size">
+                                              Size (MB)
+                                            </label>
+                                            <input
+                                              type="number"
+                                              id="size"
+                                              name="size"
+                                              className="form-control"
+                                              placeholder="1024"
+                                              onChange={(event) =>
+                                                onChangeFormField(
+                                                  index,
+                                                  event,
+                                                  type
+                                                )
+                                              }
+                                              value={input.size}
+                                            />
+                                          </div>
+                                          <div className="col-lg-2 align-self-center">
+                                            <div className="d-grid">
+                                              <input
+                                                onClick={() =>
+                                                  deleteFormField(index, type)
+                                                }
+                                                type="button"
+                                                className="btn btn-dark"
+                                                value="Delete"
+                                              />
+                                            </div>
+                                          </div>
+                                        </div>
+                                      );
+                                    })}
+                                  </div>
+                                  {buttonDownloadLoading ? (
+                                    <button
+                                      type="button"
+                                      className="btn btn-primary waves-effect waves-light"
+                                    >
+                                      <i className="bx bx-loader bx-spin font-size-16 align-middle me-2"></i>{" "}
+                                      Loading
+                                    </button>
+                                  ) : (
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        setDownloadLinks();
+                                      }}
+                                      className="btn btn-primary mt-3 mt-lg-0"
+                                    >
+                                      Submit
+                                    </button>
+                                  )}
+
+                                  <button
+                                    type="button"
+                                    onClick={() => addFormField("download")}
+                                    className="btn btn-success mt-3 mx-5 mt-lg-0"
+                                  >
+                                    Add Form Field
+                                  </button>
+                                </form>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
                         <div className="mt-4">
                           <span className="badge badge-soft-warning">PHP</span>
                           <span className="badge badge-soft-warning">
@@ -199,37 +505,6 @@ export default function AddLinks() {
                           <span className="badge badge-soft-warning">
                             Bootstrap
                           </span>
-                        </div>
-                        <div className="mt-4">
-                          <ul className="list-inline mb-0">
-                            <li className="list-inline-item mt-1">
-                              Share this job:
-                            </li>
-                            <li className="list-inline-item mt-1">
-                              <a
-                                href="#"
-                                className="btn btn-outline-primary btn-hover"
-                              >
-                                <i className="uil uil-facebook-f" /> Facebook
-                              </a>
-                            </li>
-                            <li className="list-inline-item mt-1">
-                              <a
-                                href="#"
-                                className="btn btn-outline-danger btn-hover"
-                              >
-                                <i className="uil uil-google" /> Google+
-                              </a>
-                            </li>
-                            <li className="list-inline-item mt-1">
-                              <a
-                                href="#"
-                                className="btn btn-outline-success btn-hover"
-                              >
-                                <i className="uil uil-linkedin-alt" /> linkedin
-                              </a>
-                            </li>
-                          </ul>
                         </div>
                       </div>
                     </div>
