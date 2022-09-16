@@ -8,8 +8,6 @@ import Spinner from "../../../components/spinner";
 import Wrapper from "../../../components/Wrapper";
 import { getReleaseYear } from "../../../shared_functions/getReleaseYear";
 import { NEXT_PUBLIC_PETANI_FILM_BASE_URL } from "../../../shared_variables/env";
-import UseScript from "../../../tools/UseScript";
-import { Formik, Form } from "formik";
 export default function AddLinks() {
   const router = useRouter();
   const { tmdbId } = router.query;
