@@ -24,6 +24,7 @@ export default function AddLinks() {
       size: 0,
       tmdbId: 0,
       imdbId: "",
+      resolution: 0,
     },
   ]);
   const [inputFieldsDownload, setInputFieldsDownload] = useState([
@@ -35,6 +36,7 @@ export default function AddLinks() {
       size: 0,
       tmdbId: 0,
       imdbId: "",
+      resolution: 0,
     },
   ]);
   const getData = async (id) => {
@@ -51,6 +53,7 @@ export default function AddLinks() {
           provider: "",
           link: "",
           size: 0,
+          resolution: 0,
           tmdbId: data.data.data.tmdbId,
           imdbId: data.data.data.imdbId,
         },
@@ -81,6 +84,7 @@ export default function AddLinks() {
       provider: "",
       link: "",
       size: 0,
+      resolution: 0,
       tmdbId: movie.tmdbId,
       imdbId: movie.imdbId,
     });
@@ -278,7 +282,7 @@ export default function AddLinks() {
                                                 value={input.provider}
                                               />
                                             </div>
-                                            <div className="mb-3 col-lg-4">
+                                            <div className="mb-3 col-lg-3">
                                               <label htmlFor="subject">
                                                 Link
                                               </label>
@@ -298,7 +302,7 @@ export default function AddLinks() {
                                                 value={input.link}
                                               />
                                             </div>
-                                            <div className="mb-3 col-lg-2">
+                                            <div className="mb-3 col-lg-1">
                                               <label htmlFor="size">
                                                 Size (MB)
                                               </label>
@@ -316,6 +320,26 @@ export default function AddLinks() {
                                                   )
                                                 }
                                                 value={input.size}
+                                              />
+                                            </div>
+                                            <div className="mb-3 col-lg-1">
+                                              <label htmlFor="resolution">
+                                                Reso (px)
+                                              </label>
+                                              <input
+                                                type="number"
+                                                id="resolution"
+                                                name="resolution"
+                                                className="form-control"
+                                                placeholder="720"
+                                                onChange={(event) =>
+                                                  onChangeFormField(
+                                                    index,
+                                                    event,
+                                                    type
+                                                  )
+                                                }
+                                                value={input.resolution}
                                               />
                                             </div>
                                             <div className="col-lg-2 align-self-center">
@@ -400,7 +424,7 @@ export default function AddLinks() {
                                               value={input.provider}
                                             />
                                           </div>
-                                          <div className="mb-3 col-lg-4">
+                                          <div className="mb-3 col-lg-3">
                                             <label htmlFor="subject">
                                               Link
                                             </label>
@@ -420,7 +444,7 @@ export default function AddLinks() {
                                               value={input.link}
                                             />
                                           </div>
-                                          <div className="mb-3 col-lg-2">
+                                          <div className="mb-3 col-lg-1">
                                             <label htmlFor="size">
                                               Size (MB)
                                             </label>
@@ -438,6 +462,26 @@ export default function AddLinks() {
                                                 )
                                               }
                                               value={input.size}
+                                            />
+                                          </div>
+                                          <div className="mb-3 col-lg-1">
+                                            <label htmlFor="resolution">
+                                              Reso (px)
+                                            </label>
+                                            <input
+                                              type="number"
+                                              id="resolution"
+                                              name="resolution"
+                                              className="form-control"
+                                              placeholder="720"
+                                              onChange={(event) =>
+                                                onChangeFormField(
+                                                  index,
+                                                  event,
+                                                  type
+                                                )
+                                              }
+                                              value={input.resolution}
                                             />
                                           </div>
                                           <div className="col-lg-2 align-self-center">

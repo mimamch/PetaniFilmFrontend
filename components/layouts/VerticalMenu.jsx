@@ -49,7 +49,7 @@ export default function VerticalMenu() {
               </Link>
             </li>
             <li>
-              <Link href="/movies/substitles">
+              <Link href="/movies/subtitles">
                 <a className="waves-effect">
                   <i className="bx bx-captions"></i>
                   <span key="movie-subtitles">Subtitles</span>
