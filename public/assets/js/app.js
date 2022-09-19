@@ -90,14 +90,14 @@
       (console.log("pressed"), s("body").removeClass("fullscreen-enable"));
   }
 
-  s("#side-menu").metisMenu?.(),
-    s("#vertical-menu-btn").on("click", function (e) {
-      e.preventDefault(),
-        s("body").toggleClass("sidebar-enable"),
-        992 <= s(window).width()
-          ? s("body").toggleClass("vertical-collpsed")
-          : s("body").removeClass("vertical-collpsed");
-    }),
+  // s("#side-menu").metisMenu?.(),
+  s("#vertical-menu-btn").on("click", function (e) {
+    e.preventDefault(),
+      s("body").toggleClass("sidebar-enable"),
+      992 <= s(window).width()
+        ? s("body").toggleClass("vertical-collpsed")
+        : s("body").removeClass("vertical-collpsed");
+  }),
     s(".page-content").on("click", function (e) {
       // alert('aaa')
       // e.preventDefault(),
