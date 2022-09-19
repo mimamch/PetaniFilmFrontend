@@ -1,6 +1,7 @@
 import axios from "axios";
 
 import Head from "next/head";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -208,6 +209,18 @@ export default function AddLinks() {
                                 <span className="text-muted">
                                   {movie.runtime} Minutes
                                 </span>
+                              </li>
+                              <li>
+                                <Link
+                                  href={`${router.asPath.replace(
+                                    "subtitles",
+                                    "links"
+                                  )}`}
+                                >
+                                  <a className="btn btn-sm btn-outline-primary btn-hover ">
+                                    Set Links
+                                  </a>
+                                </Link>
                               </li>
                             </ul>
                           </div>
