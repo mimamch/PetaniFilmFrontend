@@ -63,10 +63,10 @@ export default function Document() {
           src="/assets/libs/node-waves/waves.min.js"
           strategy="beforeInteractive"
         />
-        <Script
+        {/* <Script
           src="/assets/libs/metismenu/metisMenu.min.js"
           strategy="beforeInteractive"
-        />
+        /> */}
         <Script
           src="/assets/libs/apexcharts/apexcharts.min.js"
           strategy="beforeInteractive"

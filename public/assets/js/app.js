@@ -89,7 +89,8 @@
       document.msFullscreenElement ||
       (console.log("pressed"), s("body").removeClass("fullscreen-enable"));
   }
-  s("#side-menu").metisMenu(),
+
+  s("#side-menu").metisMenu?.(),
     s("#vertical-menu-btn").on("click", function (e) {
       e.preventDefault(),
         s("body").toggleClass("sidebar-enable"),
@@ -97,17 +98,13 @@
           ? s("body").toggleClass("vertical-collpsed")
           : s("body").removeClass("vertical-collpsed");
     }),
-
     s(".page-content").on("click", function (e) {
       // alert('aaa')
-      e.preventDefault(),
-        // s("body").toggleClass("sidebar-enable"),
-        992 >= s(window).width()
-          ? s("body").removeClass("sidebar-enable")
-          : null
-          //  s("body").removeClass("vertical-collpsed");
+      // e.preventDefault(),
+      // s("body").toggleClass("sidebar-enable"),
+      992 >= s(window).width() ? s("body").removeClass("sidebar-enable") : null;
+      //  s("body").removeClass("vertical-collpsed");
     }),
-
     s("#sidebar-menu a").each(function () {
       var e = window.location.href.split(/[?#]/)[0];
       this.href == e &&

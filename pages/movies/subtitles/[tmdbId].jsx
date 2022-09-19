@@ -20,10 +20,23 @@ export default function AddLinks() {
       title: "",
       language: "",
       link: "",
+      file: null,
       tmdbId: 0,
       imdbId: "",
     },
   ]);
+
+  const getBase64 = (file) =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = function () {
+        return resolve(reader.result);
+      };
+      reader.onerror = function (error) {
+        reject(error);
+      };
+    });
 
   const getData = async (id) => {
     try {
@@ -38,6 +51,7 @@ export default function AddLinks() {
           title: "",
           language: "",
           link: "",
+          file: null,
           tmdbId: data.data.data.tmdbId,
           imdbId: data.data.data.imdbId,
         },
@@ -63,6 +77,7 @@ export default function AddLinks() {
       title: "",
       language: "",
       link: "",
+      file: null,
       tmdbId: movie.tmdbId,
       imdbId: movie.imdbId,
     });
@@ -70,21 +85,37 @@ export default function AddLinks() {
     setInputSubtitles(input);
   };
 
-  const deleteFormField = (index, type) => {
+  const deleteFormField = (index) => {
     const data = [...inputSubtitles];
     data.splice(index, 1);
 
     setInputSubtitles(data);
   };
 
-  const onChangeFormField = (index, event, type) => {
+  const onChangeFormField = (index, event, fileBase64, fileName) => {
     let data = [...inputSubtitles];
-    data[index][event.target.name] = event.target.value;
+    if (fileBase64) {
+      data[index][event.target.name] = {
+        base64: fileBase64,
+        fileName: fileName,
+      };
+    } else {
+      data[index][event.target.name] = event.target.value;
+    }
     setInputSubtitles(data);
   };
 
   const setSubtitles = async () => {
-    setButtonStreamingLoading(true);
+    // setButtonStreamingLoading(true);
+    // const formData = new FormData();
+
+    // formData.append("imdbId", movie.imdbId);
+    // formData.append("tmdbId", movie.tmdbId);
+    // formData.append("subtitlesLinks", JSON.stringify(inputSubtitles));
+    // for (var [key, value] of formData.entries()) {
+    //   console.log(value);
+    // }
+    // return console.log(formData);
     try {
       await axios.post(
         `${NEXT_PUBLIC_PETANI_FILM_BASE_URL}/movie/add-movie-subtitles-links/`,
@@ -93,6 +124,7 @@ export default function AddLinks() {
           tmdbId: movie.tmdbId,
           subtitleLinks: inputSubtitles,
         }
+        // { "Content-Type": "multipart/form-data" }
       );
       toast.success("Subtitles Added With Successfully");
     } catch (error) {
@@ -227,6 +259,43 @@ export default function AddLinks() {
                                             />
                                           </div>
                                           <div className="mb-3 col-lg-3">
+                                            <label htmlFor="upload">
+                                              Upload
+                                            </label>
+                                            <input
+                                              type="file"
+                                              id="upload"
+                                              name="file"
+                                              className="form-control"
+                                              placeholder="Upload File"
+                                              onChange={(event) => {
+                                                // onChangeFormField(index, event)
+                                                // console.log(
+                                                //   event.currentTarget.files[0]
+                                                // );
+                                                if (
+                                                  !event.currentTarget.files[0]
+                                                )
+                                                  return;
+
+                                                const fileName =
+                                                  event.currentTarget.files[0]
+                                                    .name;
+                                                getBase64(
+                                                  event.currentTarget.files[0]
+                                                ).then((res) => {
+                                                  onChangeFormField(
+                                                    index,
+                                                    event,
+                                                    res,
+                                                    fileName
+                                                  );
+                                                });
+                                              }}
+                                              // value={input.language}
+                                            />
+                                          </div>
+                                          <div className="mb-3 col-lg-3">
                                             <label htmlFor="subject">
                                               Link
                                             </label>
@@ -246,7 +315,7 @@ export default function AddLinks() {
                                             <div className="d-grid">
                                               <input
                                                 onClick={() =>
-                                                  deleteFormField(index, type)
+                                                  deleteFormField(index)
                                                 }
                                                 type="button"
                                                 className="btn btn-dark"
